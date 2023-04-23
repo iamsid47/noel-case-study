@@ -1,8 +1,8 @@
 import openai
 from dotenv import load_dotenv
 import os
-from flask import Flask, Response, request, jsonify
-import flask_cors
+from flask import Flask, Response, request, jsonify, render_template
+from flask_cors import CORS
 
 load_dotenv()
 OPEN_AI_API = os.getenv("OPEN_AI_API")
@@ -24,6 +24,12 @@ def Completion(prompt):
 
 
 app = Flask(__name__)
+CORS(app)
+
+
+@app.route("/")
+def home():
+    return render_template("index.html")
 
 
 @app.route("/resp", methods=["POST"])
