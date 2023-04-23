@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask import Flask, Response, request, jsonify, render_template
 from flask_cors import CORS
+import time
 
 load_dotenv()
 OPEN_AI_API = os.getenv("OPEN_AI_API")
@@ -38,6 +39,7 @@ def resp():
     prompt = data["prompt"]
     Completion(prompt)
 
+    time.sleep(5)
     return jsonify({"response": response["choices"][0]["text"] + "."})
 
 

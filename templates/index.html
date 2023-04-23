@@ -5,9 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../static/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Noel - At Your Service</title>
   </head>
   <body>
-    Hello World
+    <div class="p-4 m-4 bg-gray-100 rounded-lg">
+      <label for="prompt" class="text-2xl font-medium m-2"
+        >Enter a prompt:</label
+      >
+      <input
+        type="text"
+        id="prompt"
+        name="prompt"
+        class="border-2 border-solid border-gray-400 px-2 py-1 rounded-lg"
+      />
+      <button
+        onclick="sendPrompt()"
+        class="px-2 py-2 font-semibold bg-blue-500 text-white rounded-md mx-4 hover:bg-blue-700 transition duration-300"
+      >
+        Submit
+      </button>
+      <div id="conversation" class="p-4 m-4"></div>
+    </div>
   </body>
+  <script>
+    function sendPrompt() {
+      // Get the value of the prompt input
+      const prompt = document.getElementById("prompt").value;
+
+      // Make a POST request to the server
+      fetch("/resp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: prompt }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Update the conversation with the user's input and the server's response
+          const conversationElement = document.getElementById("conversation");
+          const userPrompt = "<p><b>User</b>: " + prompt + "</p>";
+          const botResponse = "<p><b>Noel</b>: " + data.response + "</p>";
+          conversationElement.innerHTML += userPrompt + botResponse;
+
+          // Clear the prompt input for the next message
+          document.getElementById("prompt").value = "";
+
+          // Scroll to the bottom of the conversation to keep the latest message visible
+          conversationElement.scrollTop = conversationElement.scrollHeight;
+        })
+        .catch((error) => console.error(error));
+    }
+  </script>
 </html>
