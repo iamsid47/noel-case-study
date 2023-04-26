@@ -8,11 +8,13 @@ import time
 load_dotenv()
 OPEN_AI_API = os.getenv("OPEN_AI_API")
 
+openai.api_key = OPEN_AI_API
+
 
 def Completion(prompt):
     global response
     response = openai.Completion.create(
-        model="davinci:ft-kulthe-media-2023-04-08-19-23-11",
+        model="text-davinci-003",
         prompt=prompt,
         stop=".",
         temperature=0.5,
@@ -31,6 +33,11 @@ CORS(app)
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/chat")
+def chat():
+    return render_template("chat.html")
 
 
 @app.route("/resp", methods=["POST"])
